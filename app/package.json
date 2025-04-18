@@ -1,0 +1,23 @@
+{
+  "name": "artface",
+  "author": "Dscheinah",
+  "version": "1.0.0",
+  "keywords": ["pebble-app"],
+  "private": true,
+  "pebble": {
+    "displayName": "Artface",
+    "uuid": "ef62f7dd-7278-4050-9298-7710419b90d0",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "chalk",
+      "diorite",
+      "emery"
+    ],
+    "watchapp": {
+      "watchface": true
+    }
+  }
+}
