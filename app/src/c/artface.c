@@ -58,6 +58,19 @@ static void render(struct Layer *layer, GContext *ctx) {
   }
 }
 
+static Shape create_shape() {
+  Shape shape = {
+    .type = rand() % TYPE_COUNT,
+    .x = rand() % PBL_DISPLAY_WIDTH,
+    .y = rand() % PBL_DISPLAY_HEIGHT,
+    .w = rand() % (PBL_DISPLAY_WIDTH / 2),
+    .h = rand() % (PBL_DISPLAY_HEIGHT / 2),
+    .r = rand() % 8 + 1,
+    .color = GColorFromRGB(rand() % 256, rand() % 256, rand() % 256),
+  };
+  return shape;
+}
+
 static void handle_time(struct tm *tick_time, TimeUnits units_changed) {
   if (units_changed & DAY_UNIT) {
     static char date_buffer[9];
@@ -70,16 +83,7 @@ static void handle_time(struct tm *tick_time, TimeUnits units_changed) {
     text_layer_set_text(s_time_layer, time_buffer);
   }
   if (units_changed & HOUR_UNIT) {
-    Shape shape = {
-      .type = rand() % TYPE_COUNT,
-      .x = rand() % PBL_DISPLAY_WIDTH,
-      .y = rand() % PBL_DISPLAY_HEIGHT,
-      .w = rand() % (PBL_DISPLAY_WIDTH / 2),
-      .h = rand() % (PBL_DISPLAY_HEIGHT / 2),
-      .r = rand() % 8 + 1,
-      .color = GColorFromRGB(rand() % 256, rand() % 256, rand() % 256),
-    };
-    shapes[rand() % SHAPE_COUNT] = shape;
+    shapes[rand() % SHAPE_COUNT] = create_shape();
   }
 }
 
@@ -112,6 +116,10 @@ static void prv_window_unload(Window *window) {
 static void prv_init(void) {
   if (persist_exists(1)) {
     persist_read_data(1, &shapes, sizeof(shapes));
+  } else {
+    for (int i = 0; i < SHAPE_COUNT; i++) {
+      shapes[i] = create_shape();
+    }
   }
 
   s_window = window_create();
