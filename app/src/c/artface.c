@@ -72,6 +72,20 @@ static Shape create_shape() {
 }
 
 static void handle_time(struct tm *tick_time, TimeUnits units_changed) {
+  if (quiet_time_is_active()) {
+    window_set_background_color(s_window, GColorBlack);
+    text_layer_set_background_color(s_date_layer, GColorBlack);
+    text_layer_set_background_color(s_time_layer, GColorBlack);
+    text_layer_set_text_color(s_date_layer, GColorWhite);
+    text_layer_set_text_color(s_time_layer, GColorWhite);
+  } else {
+    window_set_background_color(s_window, GColorWhite);
+    text_layer_set_background_color(s_date_layer, GColorWhite);
+    text_layer_set_background_color(s_time_layer, GColorWhite);
+    text_layer_set_text_color(s_date_layer, GColorBlack);
+    text_layer_set_text_color(s_time_layer, GColorBlack);
+  }
+
   if (units_changed & DAY_UNIT) {
     static char date_buffer[9];
     strftime(date_buffer, 9, "%x", tick_time);
@@ -95,13 +109,11 @@ static void prv_window_load(Window *window) {
   layer_add_child(window_layer, s_layer);
 
   s_date_layer = text_layer_create(GRect(X, Y, W, Y_DATE));
-  text_layer_set_background_color(s_date_layer, GColorWhite);
   text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
   text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
 
   s_time_layer = text_layer_create(GRect(X, Y + Y_DATE, W, H - Y_DATE));
-  text_layer_set_background_color(s_time_layer, GColorWhite);
   text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
   text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_LECO_36_BOLD_NUMBERS));
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
